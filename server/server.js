@@ -32,6 +32,11 @@ mongoose.connect(process.env.MONGODB_URI, {
 const io = socketIo(server, {
     cors: corsOptions
 });
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the Code Mentor API');
+});
+
 // Endpoint to get code blocks
 app.get('/codeblocks', async (req, res) => {
     console.log('Fetching code blocks from the database...');
