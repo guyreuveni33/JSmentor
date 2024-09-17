@@ -1,3 +1,5 @@
+require('dotenv').config();  // Load environment variables
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -8,84 +10,116 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors());
+// Updated CORS configuration
+const corsOptions = {
+    origin: ['https://mentor-code-space.vercel.app', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-mongoose.connect('mongodb://localhost:27017/codeblocksdb', {
+app.use(cors(corsOptions));
+
+// Make sure the preflight request handler is correct:
+app.options('*', cors(corsOptions));
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB successfully');
 }).catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
+    console.error('Error connecting to MongoDB:', err.message);
 });
 
+// Socket.io setup with updated CORS configuration
 const io = socketIo(server, {
-    cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
+    cors: corsOptions
 });
 
+// Endpoint to get code blocks
 app.get('/codeblocks', async (req, res) => {
+    console.log('Fetching code blocks from the database...');
     try {
         const codeBlocks = await CodeBlock.find();
+        console.log(`Found ${codeBlocks.length} code blocks`);
         res.json(codeBlocks);
     } catch (error) {
+        console.error('Error fetching code blocks:', error.message);
         res.status(500).send('Server error');
     }
 });
 
+// Manage socket connections and rooms
 let rooms = {};
 
 io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
 
     socket.on('joinRoom', async ({ codeBlockId }) => {
+        console.log(`Client ${socket.id} is trying to join room: ${codeBlockId}`);
+
         if (!rooms[codeBlockId]) {
             rooms[codeBlockId] = { mentor: socket.id, students: [] };
+            console.log(`Room ${codeBlockId} created. Client ${socket.id} is the mentor.`);
+
             const codeBlock = await CodeBlock.findById(codeBlockId);
             socket.emit('codeBlockData', { code: codeBlock.code, role: 'mentor' });
         } else {
             rooms[codeBlockId].students.push(socket.id);
+            console.log(`Client ${socket.id} joined as a student in room ${codeBlockId}. Total students: ${rooms[codeBlockId].students.length}`);
+
             const codeBlock = await CodeBlock.findById(codeBlockId);
             socket.emit('codeBlockData', { code: codeBlock.code, role: 'student' });
         }
-        socket.join(codeBlockId);
 
-        // Broadcast the updated student count to all clients in the room
+        socket.join(codeBlockId);
         io.to(codeBlockId).emit('studentsCount', rooms[codeBlockId].students.length);
     });
 
     socket.on('codeChange', (newCode) => {
+        console.log(`Code change event received from client ${socket.id}: ${newCode}`);
+
         const room = Object.keys(rooms).find(room =>
             rooms[room].mentor === socket.id || rooms[room].students.includes(socket.id)
         );
+
         if (room) {
+            console.log(`Processing code change for room ${room}`);
             CodeBlock.findById(room).then(codeBlock => {
                 if (newCode.trim() === codeBlock.solution.trim()) {
+                    console.log('Code matches the solution, sending success message...');
                     io.to(room).emit('solutionMatched', true);
                 } else {
+                    console.log('Code does not match the solution, broadcasting update...');
                     socket.to(room).emit('updateCode', newCode);
                 }
+            }).catch((err) => {
+                console.error('Error fetching code block for room:', err.message);
             });
         }
     });
 
     socket.on('disconnect', () => {
+        console.log(`Client ${socket.id} disconnected`);
+
         Object.keys(rooms).forEach(codeBlockId => {
             if (rooms[codeBlockId].mentor === socket.id) {
+                console.log(`Mentor ${socket.id} left room ${codeBlockId}. Resetting room.`);
                 io.to(codeBlockId).emit('mentorLeft');
                 delete rooms[codeBlockId];
             } else if (rooms[codeBlockId].students.includes(socket.id)) {
                 rooms[codeBlockId].students = rooms[codeBlockId].students.filter(id => id !== socket.id);
-                // Broadcast the updated student count after a student disconnects
+                console.log(`Student ${socket.id} left room ${codeBlockId}. Remaining students: ${rooms[codeBlockId].students.length}`);
                 io.to(codeBlockId).emit('studentsCount', rooms[codeBlockId].students.length);
             }
         });
     });
 });
 
-server.listen(5000, () => {
-    console.log('Server running on port 5000');
+// Start server on the specified port
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
