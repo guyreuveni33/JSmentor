@@ -1,4 +1,4 @@
-require('dotenv').config();  // Load environment variables
+require('dotenv').config();
 
 const express = require('express');
 const http = require('http');
@@ -10,20 +10,16 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 
-// Updated CORS configuration
 const corsOptions = {
-    origin: ['https://mentor-code-space.vercel.app', 'http://localhost:3000'],
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
-
-// Make sure the preflight request handler is correct:
 app.options('*', cors(corsOptions));
 
-// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -33,11 +29,9 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.error('Error connecting to MongoDB:', err.message);
 });
 
-// Socket.io setup with updated CORS configuration
 const io = socketIo(server, {
     cors: corsOptions
 });
-
 // Endpoint to get code blocks
 app.get('/codeblocks', async (req, res) => {
     console.log('Fetching code blocks from the database...');
