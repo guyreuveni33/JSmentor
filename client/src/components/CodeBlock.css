@@ -1,0 +1,116 @@
+/* Main container for the code block */
+.codeblock-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Editor Wrapper */
+.editor-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Code editor styling */
+.code-editor {
+    width: 100%;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    text-align: left;
+}
+
+.code-editor.read-only {
+    background-color: #eaeaea;
+    cursor: not-allowed;
+}
+
+.code-editor textarea {
+    outline: none;
+}
+
+/* Improved Bubble Tooltip */
+.bubble-tooltip {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* Show the tooltip */
+.bubble-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Tooltip arrow */
+.bubble-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #333 transparent;
+}
+
+/* Additional styles */
+.title {
+    text-align: center;
+    font-size: 35px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.codeblock-id, .role, .students-count, .welcome-message {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.smiley {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.return-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.return-button:hover {
+    background-color: #357ab8;
+}
