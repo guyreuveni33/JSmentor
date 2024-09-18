@@ -49,7 +49,6 @@ app.get('/codeblocks', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
 // Manage socket connections and rooms
 let rooms = {};
 
