@@ -1,89 +1,101 @@
-/* Main container styling with background */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); /* Gradient background */
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
 }
 
-/* Card-like container for code blocks */
-.code-block-list {
+.code-block-container {
     max-width: 800px;
+    width: 90%;
     padding: 40px;
-    background-color:rgba(200, 230, 255, 0.9); /* Semi-transparent white */
-    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
 }
 
-/* Heading Styling */
-h1 {
-    font-family: 'Poppins', sans-serif;
+.title {
     font-size: 36px;
     font-weight: 600;
     color: #333;
     margin-bottom: 30px;
+    text-align: center;
 }
 
-/* List container for the buttons */
-ul {
+.code-block-list ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-/* List Item Styling */
 .code-block-item {
-    margin: 15px;
-    width: 300px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
+    margin: 15px 0;
 }
 
-/* Button styling for links */
-.code-block-item a {
-    display: inline-block;
-    width: 100%;
-    max-width: 400px;
+.code-block-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px;
-    background-color: #007bff;
-    color: white;
+    background-color: #f8f9fa;
+    color: #333;
     text-decoration: none;
     border-radius: 10px;
-    font-size: 20px;
-    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.code-block-item a:hover {
-    background-color: #0056b3;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
+.code-block-link:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .code-block-list {
-        padding: 20px;
-    }
-
-    .code-block-item a {
-        font-size: 18px;
-        padding: 15px;
-    }
+.code-block-name {
+    flex-grow: 1;
 }
 
-/* Error Message Styling */
+.arrow {
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+.no-blocks {
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+}
+
 .error-message {
     color: #d9534f;
     font-size: 18px;
+    text-align: center;
+    padding: 20px;
+    background-color: #f8d7da;
+    border-radius: 10px;
     margin-top: 20px;
-    font-family: 'Poppins', sans-serif;
+}
+
+@media (max-width: 768px) {
+    .code-block-container {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .code-block-link {
+        font-size: 16px;
+        padding: 15px;
+    }
 }

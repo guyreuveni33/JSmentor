@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
-import './CodeBlockList.css'; // Import the CSS file for styling
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './CodeBlockList.css';
 
 const CodeBlockList = () => {
     const [codeBlocks, setCodeBlocks] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch the code blocks from the server
-        fetch('https://mentorcodespace-production.up.railway.app/codeblocks')
+        fetch('http://localhost:5000/codeblocks')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch');
@@ -23,17 +22,20 @@ const CodeBlockList = () => {
         return <div className="error-message">Error: {error}</div>;
     }
 
-    return (<div>
-
-            <h1>Choose Your Code Block</h1>
+    return (
+        <div className="code-block-container">
+            <h1 className="title">Choose Your Code Block</h1>
             <div className="code-block-list">
                 {codeBlocks.length === 0 ? (
-                    <p>No code blocks available</p>
+                    <p className="no-blocks">No code blocks available</p>
                 ) : (
                     <ul>
                         {codeBlocks.map((block) => (
                             <li key={block._id} className="code-block-item">
-                                <Link to={`/codeblock/${block._id}`}>{block.name}</Link>
+                                <Link to={`/codeblock/${block._id}`} className="code-block-link">
+                                    <span className="code-block-name">{block.name}</span>
+                                    <span className="arrow">→</span>
+                                </Link>
                             </li>
                         ))}
                     </ul>

@@ -1,0 +1,54 @@
+.editor-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.code-editor {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    min-height: 300px;
+}
+
+.code-editor.read-only {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.bubble-tooltip {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+}
+
+.bubble-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bubble-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+@media (max-width: 768px) {
+    .code-editor {
+        min-height: 250px;
+    }
+}
