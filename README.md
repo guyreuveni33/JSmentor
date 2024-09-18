@@ -78,13 +78,7 @@ The client will run on [http://localhost:3000](http://localhost:3000).
 
 To run the server:
 
-1. Create a `.env` file in the `server` directory with the following content:
-
-   ```
-   MONGODB_URI=mongodb+srv://guyhaim55:Uw17m373rAz93CJ8@cluster0.fsmj5.mongodb.net/
-   ```
-
-2. Start the server:
+Start the server:
 
 ```bash
 cd server
