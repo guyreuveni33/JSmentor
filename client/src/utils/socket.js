@@ -10,16 +10,16 @@ export const initializeSocket = (codeBlockId, setCode, setRole, setStudentsCount
     socket.on('connect_error', () => {
         setCodeState('Failed to connect to the server');
     });
-
+    //this is the event that is emitted when a new client connects to the server
     socket.on('codeBlockData', (data) => {
         setCode(data.code);
         setRole(data.role);
     });
-
+    //this event is emitted when the code is updated by students
     socket.on('updateCode', (newCode) => {
         setCode(newCode);
     });
-
+    //this event is emitted when the number of students in the room changes by leaving or joining
     socket.on('studentsCount', (count) => {
         setStudentsCount(count);
     });

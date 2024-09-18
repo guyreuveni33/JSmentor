@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// Connect to the MongoDB database using the connection string in the .env file
 const connectToDatabase = () => {
     mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,

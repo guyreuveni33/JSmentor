@@ -8,7 +8,7 @@ const setupSocketHandlers = (io) => {
 
         socket.on('joinRoom', async ({ codeBlockId }) => {
             console.log(`Client ${socket.id} is trying to join room: ${codeBlockId}`);
-
+            // Check if the room exists, if not create it
             if (!rooms[codeBlockId]) {
                 rooms[codeBlockId] = { mentor: socket.id, students: [], currentCode: '' };
                 console.log(`Room ${codeBlockId} created. Client ${socket.id} is the mentor.`);
@@ -22,11 +22,11 @@ const setupSocketHandlers = (io) => {
 
                 socket.emit('codeBlockData', { code: rooms[codeBlockId].currentCode, role: 'student' });
             }
-
+            // Join the room
             socket.join(codeBlockId);
             io.to(codeBlockId).emit('studentsCount', rooms[codeBlockId].students.length);
         });
-
+        // Handle code change events
         socket.on('codeChange', (newCode) => {
             console.log(`Code change event received from client ${socket.id}`);
 
@@ -45,7 +45,8 @@ const setupSocketHandlers = (io) => {
                         console.error('CodeBlock not found or solution is not a string');
                         return;
                     }
-
+                    // Normalize the code by removing all whitespace and converting to lowercase so the match to the
+                    // solution is case-insensitive and ignores whitespace
                     function normalizeCode(code) {
                         return code.replace(/\s+/g, '').toLowerCase();
                     }
@@ -67,9 +68,11 @@ const setupSocketHandlers = (io) => {
             console.log(`Client ${socket.id} disconnected`);
 
             Object.keys(rooms).forEach(codeBlockId => {
+                // Check if the mentor left the room
                 if (rooms[codeBlockId].mentor === socket.id) {
                     console.log(`Mentor ${socket.id} left room ${codeBlockId}. Resetting room.`);
                     io.to(codeBlockId).emit('mentorLeft');
+                    // Delete the room so the other clients can't join and the current students are notified
                     delete rooms[codeBlockId];
                 } else if (rooms[codeBlockId].students.includes(socket.id)) {
                     rooms[codeBlockId].students = rooms[codeBlockId].students.filter(id => id !== socket.id);

@@ -18,7 +18,7 @@ const CodeBlock = () => {
     const navigate = useNavigate();
     const socketRef = useRef(null);
     const timeoutRef = useRef(null);
-
+    // Initialize the socket connection
     useEffect(() => {
         const socket = initializeSocket(
             codeBlockId,
@@ -53,7 +53,7 @@ const CodeBlock = () => {
             emitCodeChange(newCode);
         }
     };
-
+    //this prevents the mentor from clicking on the editor text and showing the tooltip
     const handleMentorClick = (e) => {
         if (role === 'mentor') {
             e.preventDefault();
