@@ -7,7 +7,7 @@ const CodeBlockList = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/codeblocks')
+        fetch('https://mentorcodespace-production.up.railway.app/codeblocks')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch');

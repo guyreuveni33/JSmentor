@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 export const initializeSocket = (codeBlockId, setCode, setRole, setStudentsCount, setSolutionMatched, setShowMentorLeaveModal, navigate, setCodeState) => {
-    const socket = io('http://localhost:5000');
+    const socket = io('https://mentorcodespace-production.up.railway.app/');
 
     socket.on('connect', () => {
         socket.emit('joinRoom', { codeBlockId });
