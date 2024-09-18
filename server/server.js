@@ -11,7 +11,11 @@ const app = express();
 const server = http.createServer(app);
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        process.env.FRONTEND_URL,
+        'http://localhost:3000',
+        'https://mentor-code-space.vercel.app'
+    ],
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
