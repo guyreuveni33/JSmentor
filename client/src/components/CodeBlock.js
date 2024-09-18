@@ -20,7 +20,7 @@ const CodeBlock = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const newSocket = io('http://localhost:5000');
+        const newSocket = io('https://mentorcodespace-production.up.railway.app/');
         setSocket(newSocket);
 
         newSocket.on('connect', () => {
