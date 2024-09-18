@@ -114,3 +114,6 @@ const socket = io('http://localhost:5000');
 ```
 
 After making this change, the client will communicate with the local server rather than the production server.
+
+![image](https://github.com/user-attachments/assets/99bf1461-2d9b-4e95-8012-2121e70ebbee)
+
